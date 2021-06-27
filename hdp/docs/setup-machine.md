@@ -156,7 +156,7 @@ docker exec -it postgresql psql --username=root ambari -c "ALTER ROLE ambaridba 
 ## Criando usuario para ranger
 ```bash
 docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE ranger;" 
-docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerdba WITH PASSWORD 'password';"
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerdba WITH PASSWORD 'rangerpwd';"
 docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE ranger TO rangerdba;"
 ```
 
