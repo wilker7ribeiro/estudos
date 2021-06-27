@@ -43,6 +43,7 @@ k3d -h
 # add zsh completion
 mkdir -p ~/.oh-my-zsh/custom/plugins/k3d
 k3d completion zsh > ~/.oh-my-zsh/custom/plugins/k3d/_k3d
+sed -ri 's/^plugins=\((.*)\)/plugins=\(\1 k3d\)/g' ~/.zshrc
 rm -f ~/.zcompdump* && source ~/.zshrc
 ```
 

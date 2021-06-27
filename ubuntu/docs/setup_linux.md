@@ -39,7 +39,7 @@ brew install gcc
 ```bash
 ```
 
-## install hostess
+## install hostess (add itens to /etc/hosts)
 ```bash
 brew install hostess
 ```
