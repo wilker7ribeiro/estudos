@@ -57,9 +57,13 @@ kubectl apply -f argo-k8s/files/ingress/prometheus.yaml
 # Editar os arquivos ingress para apontar para *.argodevops.com em vez de *.argodevops.localhost
 
 ```bash
-echo "ArcoCD: http://argocd.argodevops.localhost:8081"
-echo "ArcoCD admin username: admin"
-echo "ArcoCD admin password: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"
-echo "Prometheus: http://prometheus.argodevops.localhost:8081"
-
+echo ""
+echo "[ArgoCD]"
+echo "URL:\t\t http://argocd.argodevops.localhost:8081"
+echo "Admin User:\t admin"
+echo "Admin Password:\t $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"
+echo "Login command: \t argocd login --username admin --password pGJsukMLCVuFVdkr argocd.argodevops.localhost:8081 --insecure"
+echo ""
+echo "[Prometheus]"
+echo "URL:\t\t http://prometheus.argodevops.localhost:8081"
 ```
