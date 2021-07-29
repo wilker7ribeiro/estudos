@@ -184,10 +184,31 @@ docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE rangerkm
 docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerkmsdba WITH PASSWORD 'rangerkmspwd';"
 docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE rangerkms TO rangerkmsdba;"
 ```
+# RUN AMBARI REPO
+docker run -dit -h ambari-repo --name ambari-repo --network workbench -p 80 -v /mnt/hgfs/HDP-vm-shared/hortonworks-repo:/usr/local/apache2/htdocs/ httpd:2.4
 
+# BUILD IMAGES
+./docker/ambari/base/build.sh
+./docker/ambari/server/build.sh
+./docker/ambari/agent/build.sh
+
+# RUN AMBARI SERVER
+docker run -h ambari-server --name ambari-server --privileged --network workbench -p 8080:8080 -t -d wilker/ambari-server
 
 
 ## Criando base do ambari
 ```bash
 docker exec -i ambari-server /bin/bash -c 'cat /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql' | docker exec -i postgresql bash -c 'psql -U ambaridba ambari -w -a -q -f -'
 ```
+
+# RUN AMBARI-BASES 
+docker run -dit -h ambari-agent-1 --name ambari-agent-1 --privileged --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-2 --name ambari-agent-2 --privileged --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-3 --name ambari-agent-3 --privileged --network workbench wilker/ambari-base
+
+# Create cluster
+
+# Get ambari-server ssh-key 
+docker exec -it ambari-server bash -c 'cat /root/.ssh/id_rsa'
+
+Target Hosts: ambari-agent-[1-3]

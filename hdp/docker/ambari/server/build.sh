@@ -1,0 +1,1 @@
+docker build $(dirname "$0") -t wilker/ambari-server --network workbench

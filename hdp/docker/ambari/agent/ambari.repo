@@ -1,0 +1,6 @@
+[Ambari]
+name=Ambari
+baseurl=http://ambari-repo/ambari/centos7/2.7.4.0
+path=/
+enabled=1
+gpgcheck=0
