@@ -160,6 +160,33 @@ docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerdba
 docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE ranger TO rangerdba;"
 ```
 
+
+```bash
+docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE hive;" 
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER hivedba WITH PASSWORD 'hivepwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE hive TO hivedba;"
+```
+
+```bash
+docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE druid;" 
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER druiddba WITH PASSWORD 'druidpwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE druid TO druiddba;"
+```
+
+```bash
+docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE oozie;" 
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER ooziedba WITH PASSWORD 'ooziepwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE oozie TO ooziedba;"
+```
+
+```bash
+docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE rangerkms;" 
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerkmsdba WITH PASSWORD 'rangerkmspwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE rangerkms TO rangerkmsdba;"
+```
+
+
+
 ## Criando base do ambari
 ```bash
 docker exec -i ambari-server /bin/bash -c 'cat /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql' | docker exec -i postgresql bash -c 'psql -U ambaridba ambari -w -a -q -f -'

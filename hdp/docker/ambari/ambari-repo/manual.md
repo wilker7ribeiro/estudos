@@ -1,0 +1,1 @@
+docker run -dit -h ambari-repo --name ambari-repo --network workbench -p 80 -v /mnt/hgfs/HDP-vm-shared/hortonworks-repo:/usr/local/apache2/htdocs/ httpd:2.4
