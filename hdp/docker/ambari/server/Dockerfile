@@ -7,9 +7,9 @@ ADD ambari.repo /etc/yum.repos.d/
 # docker cp /mnt/hgfs/HDP-vm-shared/ambari/ambari-server-2.7.4.0-118.x86_64.rpm ambari-server:/tmp/
 # yum install -y libselinux-utils ntp java-1.8.0-openjdk-devel postgresql-jdbc* 
 # initscripts (service wrapper for servicectl) is need othewise the Ambari is unable to start postgresql
-RUN sed -ri 's/exclude=systemd/# exclude=systemd/g' /etc/yum.conf 
+# RUN sed -ri 's/exclude=systemd/# exclude=systemd/g' /etc/yum.conf 
 RUN yum install -y ambari-server && yum clean all
-RUN sed -ri 's/# exclude=systemd/exclude=systemd/g' /etc/yum.conf 
+# RUN sed -ri 's/# exclude=systemd/exclude=systemd/g' /etc/yum.conf 
 # yum -y install tmp/ambari-server-2.7.4.0-118.x86_64.rpm 
 
 RUN sed -ri 's/<selection>MANDATORY<\/selection>/<!-- <selection>MANDATORY<\/selection> -->/g' /var/lib/ambari-server/resources/stacks/HDP/3.0/services/SMARTSENSE/metainfo.xml
