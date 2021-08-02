@@ -187,6 +187,25 @@ docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES 
 # RUN AMBARI REPO
 docker run -dit -h ambari-repo --name ambari-repo --network workbench -p 80 -v /mnt/hgfs/HDP-vm-shared/hortonworks-repo:/usr/local/apache2/htdocs/ httpd:2.4
 
+# scrap ports para exportar na imagem base
+```bash
+echo 'Criando virtual env' \
+  && python -m venv webscraping-ports/.venv \
+  && echo 'Ativando virtual env' \
+  && source webscraping-ports/.venv/bin/activate \
+  && echo 'Executando pip install' \
+  && pip install -q -r webscraping-ports/requirements.txt \
+  && echo 'Executando script python' \
+  && python webscraping-ports/scrap_ports.py > webscraping-ports/ports.txt \
+  && echo '' >> webscraping-ports/ports.txt \
+  && echo 'Limpando portas' \
+  && sed -ri '/## EXPOSE PORTS INIT/,/## EXPOSE PORTS END/!b;//!d' docker/ambari/base/Dockerfile \
+  && echo 'Incluindo portas' \
+  && sed -ri '/## EXPOSE PORTS INIT/r webscraping-ports/ports.txt' docker/ambari/base/Dockerfile \
+  && echo 'Desetivanvo virtual env' \
+  && deactivate
+```
+
 # BUILD IMAGES
 ./docker/ambari/base/build.sh
 ./docker/ambari/server/build.sh
