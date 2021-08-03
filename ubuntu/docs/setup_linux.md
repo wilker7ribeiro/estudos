@@ -5,7 +5,7 @@
 ```bash
 sudo apt update
 sudo apt upgrade
-sudo apt install curl wget git zsh
+sudo apt install -y curl wget git zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 chsh -s $(which zsh)
 sudo chsh "$USER" -s /bin/zsh
@@ -34,7 +34,7 @@ source ~/.zshrc
 echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/wilker/.zprofile
 echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-sudo apt install build-essential
+sudo apt install -y build-essential
 brew install gcc
 ```
 ```bash
@@ -59,7 +59,7 @@ sudo snap install dbeaver-ce
 
 ## PyEn
 ```bash
-sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
+sudo apt-get update; sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 

@@ -1,126 +1,5 @@
-# Passo a passo
-
-# Instalar libs
-## Install ZSH
-```bash
-sudo apt update
-sudo apt upgrade
-sudo apt install curl wget git zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-sudo chsh "$USER" -s /bin/zsh
-sudo su - "$USER"
-```
-
-## Installing ZSH Plugins
-```bash
-git clone 'https://github.com/zsh-users/zsh-autosuggestions.git' "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
-sed -ri 's/^plugins=\((.*)\)/plugins=\(\1 zsh-autosuggestions\)/g' ~/.zshrc
-
-git clone 'https://github.com/zsh-users/zsh-completions.git' "$ZSH_CUSTOM/plugins/zsh-completions"
-sed -ri 's/^plugins=\((.*)\)/plugins=\(\1 zsh-completions\)/g' ~/.zshrc
-
-git clone 'https://github.com/zsh-users/zsh-history-substring-search.git' "$ZSH_CUSTOM/plugins/history-substring-search"
-sed -ri 's/^plugins=\((.*)\)/plugins=\(\1 history-substring-search\)/g' ~/.zshrc
-
-git clone 'https://github.com/zsh-users/zsh-syntax-highlighting.git' "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-sed -ri 's/^plugins=\((.*)\)/plugins=\(\1 zsh-syntax-highlighting\)/g' ~/.zshrc
-
-source ~/.zshrc
-```
-## Install brew
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/wilker/.zprofile
-echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-sudo apt install build-essential
-brew install gcc
-```
-```bash
-```
-
-## install hostess
-```bash
-brew install hostess
-```
-
-## Install docker
-```bash
-sudo apt remove docker docker-engine docker.io containerd runc
-
-sudo apt-get update
-
-sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release
-
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-echo \\n  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \\n  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker 
-docker run hello-world
-docker ps
-sed -ri 's/^plugins=\((.*)\)/plugins=\(\1 docker docker-compose\)/g' ~/.zshrc
-source ~/.zshrc
-```
-## Install Kubectl e Kubectx
-```bash
-brew install kubectl
-brew install kubectx
-sed -ri 's/^plugins=\((.*)\)/plugins=\(\1 kubectl kubectx\)/g' ~/.zshrc
-source ~/.zshrc
-```
-
-## Install helm
-```bash
-brew install helm
-```
-
-## Install k3d
-```bash
-curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
-
-k3d -h
-
-# add zsh completion
-mkdir -p ~/.oh-my-zsh/custom/plugins/k3d
-k3d completion zsh > ~/.oh-my-zsh/custom/plugins/k3d/_k3d
-rm -f ~/.zcompdump* && source ~/.zshrc
-
-```
-
-# Instalar programas
-
-## Install lens
-```bash
-sudo snap install kontena-lens --classic
-```
-
-## Install vscode
-```bash
-sudo snap install --classic code
-```
-
-## Install dbeaver
-```bash
-sudo snap install dbeaver-ce
-```
-
-# Execucao
-
-## Create cluster
-```bash
-k3d cluster create mycluster
-
-# Criar stack de monitoracao
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install prometheus prometheus-community/kube-prometheus-stack
-```
-
+## [Setup linux](../../ubuntu/docs/setup_linux.md)
+## [Setup docker](../../ubuntu/docs/setup_docker.md)
 
 ## create network workbench
 ```bash
@@ -224,10 +103,11 @@ docker exec -i ambari-server /bin/bash -c 'cat /var/lib/ambari-server/resources/
 docker run -dit -h ambari-agent-1 --name ambari-agent-1 --privileged --network workbench wilker/ambari-base
 docker run -dit -h ambari-agent-2 --name ambari-agent-2 --privileged --network workbench wilker/ambari-base
 docker run -dit -h ambari-agent-3 --name ambari-agent-3 --privileged --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-4 --name ambari-agent-4 --privileged --network workbench wilker/ambari-base
 
 # Create cluster
 
 # Get ambari-server ssh-key 
 docker exec -it ambari-server bash -c 'cat /root/.ssh/id_rsa'
 
-Target Hosts: ambari-agent-[1-3]
+Target Hosts: ambari-agent-[1-4]
