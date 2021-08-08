@@ -1,6 +1,9 @@
 ## [Setup linux](../../ubuntu/docs/setup_linux.md)
 ## [Setup docker](../../ubuntu/docs/setup_docker.md)
 
+## Install java
+## sudo apt install openjdk-11-jdk
+
 ## create network workbench
 ```bash
 docker network create workbench \
@@ -104,4 +107,21 @@ docker exec -it ambari-server bash -c 'cat /root/.ssh/id_rsa'
 Target Hosts: ambari-agent-[1-5]
 
 # Run docker dns proxy
+docker run --rm --hostname dns.mageddo -v /var/run/docker.sock:/var/run/docker.sock -v /etc/resolv.conf:/etc/resolv.conf defreitas/dns-proxy-server
+
+
+# Start after
+
+docker start postgresql ambari-repo
+docker start ambari-server
+docker start ambari-agent-1
+docker exec -it ambari-agent-1 bash -c 'ambari-agent start'
+docker start ambari-agent-2
+docker exec -it ambari-agent-2 bash -c 'ambari-agent start'
+docker start ambari-agent-3
+docker exec -it ambari-agent-3 bash -c 'ambari-agent start'
+docker start ambari-agent-4
+docker exec -it ambari-agent-4 bash -c 'ambari-agent start'
+docker start ambari-agent-5
+docker exec -it ambari-agent-5 bash -c 'ambari-agent start'
 docker run --rm --hostname dns.mageddo -v /var/run/docker.sock:/var/run/docker.sock -v /etc/resolv.conf:/etc/resolv.conf defreitas/dns-proxy-server
