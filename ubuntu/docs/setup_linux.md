@@ -5,7 +5,7 @@
 ```bash
 sudo apt update
 sudo apt upgrade
-sudo apt install -y curl wget git zsh
+sudo apt install -y curl wget git zsh xclip
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 chsh -s $(which zsh)
 sudo chsh "$USER" -s /bin/zsh

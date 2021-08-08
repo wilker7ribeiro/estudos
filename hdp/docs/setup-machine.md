@@ -25,43 +25,33 @@ sudo $(which hostess) add postgresql 127.0.0.1
 ```
 
 ## Criando base para ambari
+```bash
 docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE ambari;"
-docker exec -it postgresql psql --username=root ambari -c "CREATE USER ambaridba WITH PASSWORD 'ambaripwd';"
-docker exec -it postgresql psql --username=root ambari -c "GRANT ALL PRIVILEGES ON DATABASE ambari TO ambaridba;"
-docker exec -it postgresql psql --username=root ambari -c "CREATE SCHEMA ambari AUTHORIZATION ambaridba;"
-docker exec -it postgresql psql --username=root ambari -c "ALTER SCHEMA ambari OWNER TO ambaridba;"
-docker exec -it postgresql psql --username=root ambari -c "ALTER ROLE ambaridba SET search_path to 'ambari', 'public';"
+docker exec -it postgresql psql --username=root ambari -c "CREATE USER ambari WITH PASSWORD 'ambaripwd';"
+docker exec -it postgresql psql --username=root ambari -c "GRANT ALL PRIVILEGES ON DATABASE ambari TO ambari;"
+docker exec -it postgresql psql --username=root ambari -c "CREATE SCHEMA ambari AUTHORIZATION ambari;"
+docker exec -it postgresql psql --username=root ambari -c "ALTER SCHEMA ambari OWNER TO ambari;"
+docker exec -it postgresql psql --username=root ambari -c "ALTER ROLE ambari SET search_path to 'ambari', 'public';"
 
-## Criando usuario para ranger
-```bash
 docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE ranger;" 
-docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerdba WITH PASSWORD 'rangerpwd';"
-docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE ranger TO rangerdba;"
-```
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER ranger WITH PASSWORD 'rangerpwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE ranger TO ranger;"
 
-
-```bash
 docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE hive;" 
-docker exec -it postgresql psql --username=root ranger -c "CREATE USER hivedba WITH PASSWORD 'hivepwd';"
-docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE hive TO hivedba;"
-```
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER hive WITH PASSWORD 'hivepwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE hive TO hive;"
 
-```bash
 docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE druid;" 
-docker exec -it postgresql psql --username=root ranger -c "CREATE USER druiddba WITH PASSWORD 'druidpwd';"
-docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE druid TO druiddba;"
-```
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER druid WITH PASSWORD 'druidpwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE druid TO druid;"
 
-```bash
 docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE oozie;" 
-docker exec -it postgresql psql --username=root ranger -c "CREATE USER ooziedba WITH PASSWORD 'ooziepwd';"
-docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE oozie TO ooziedba;"
-```
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER oozie WITH PASSWORD 'ooziepwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE oozie TO oozie;"
 
-```bash
 docker exec -it postgresql psql --username=root dev -c "CREATE DATABASE rangerkms;" 
-docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerkmsdba WITH PASSWORD 'rangerkmspwd';"
-docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE rangerkms TO rangerkmsdba;"
+docker exec -it postgresql psql --username=root ranger -c "CREATE USER rangerkms WITH PASSWORD 'rangerkmspwd';"
+docker exec -it postgresql psql --username=root ranger -c "GRANT ALL PRIVILEGES ON DATABASE rangerkms TO rangerkms;"
 ```
 # RUN AMBARI REPO
 docker run -dit -h ambari-repo --name ambari-repo --network workbench -p 80 -v /mnt/hgfs/HDP-vm-shared/hortonworks-repo:/usr/local/apache2/htdocs/ httpd:2.4
@@ -96,18 +86,22 @@ docker run -h ambari-server --name ambari-server --privileged --network workbenc
 
 ## Criando base do ambari
 ```bash
-docker exec -i ambari-server /bin/bash -c 'cat /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql' | docker exec -i postgresql bash -c 'psql -U ambaridba ambari -w -a -q -f -'
+docker exec -i ambari-server /bin/bash -c 'cat /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql' | docker exec -i postgresql bash -c 'psql -U ambari ambari -w -a -q -f -'
 ```
 
 # RUN AMBARI-BASES 
-docker run -dit -h ambari-agent-1 --name ambari-agent-1 --privileged --network workbench wilker/ambari-base
-docker run -dit -h ambari-agent-2 --name ambari-agent-2 --privileged --network workbench wilker/ambari-base
-docker run -dit -h ambari-agent-3 --name ambari-agent-3 --privileged --network workbench wilker/ambari-base
-docker run -dit -h ambari-agent-4 --name ambari-agent-4 --privileged --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-1 --name ambari-agent-1 --privileged -m 8g --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-2 --name ambari-agent-2 --privileged -m 8g --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-3 --name ambari-agent-3 --privileged -m 8g --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-4 --name ambari-agent-4 --privileged -m 8g --network workbench wilker/ambari-base
+docker run -dit -h ambari-agent-5 --name ambari-agent-5 --privileged -m 8g --network workbench wilker/ambari-base
 
 # Create cluster
 
 # Get ambari-server ssh-key 
 docker exec -it ambari-server bash -c 'cat /root/.ssh/id_rsa'
 
-Target Hosts: ambari-agent-[1-4]
+Target Hosts: ambari-agent-[1-5]
+
+# Run docker dns proxy
+docker run --rm --hostname dns.mageddo -v /var/run/docker.sock:/var/run/docker.sock -v /etc/resolv.conf:/etc/resolv.conf defreitas/dns-proxy-server

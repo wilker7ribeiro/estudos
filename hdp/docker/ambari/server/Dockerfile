@@ -17,7 +17,7 @@ RUN sed -ri 's/<selection>MANDATORY<\/selection>/<!-- <selection>MANDATORY<\/sel
 RUN yum install -y postgresql-jdbc && yum clean all
 RUN chmod 644 /usr/share/java/postgresql-jdbc.jar
 
-# PGPASSWORD=ambaripwd psql -h postgresql -U ambaridba ambari  -a -q -f /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
+# PGPASSWORD=ambaripwd psql -h postgresql -U ambari ambari  -a -q -f /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
 
 RUN ambari-server setup --silent \
     --java-home $JAVA_HOME \
@@ -39,8 +39,8 @@ RUN echo 'server.jdbc.postgres.schema=ambari' >> /etc/ambari-server/conf/ambari.
 RUN echo 'server.jdbc.rca.driver=org.postgresql.Driver' >> /etc/ambari-server/conf/ambari.properties
 RUN echo 'server.jdbc.rca.url=jdbc:postgresql://postgresql:5432/ambari' >> /etc/ambari-server/conf/ambari.properties
 RUN echo 'server.jdbc.url=jdbc:postgresql://postgresql:5432/ambari' >> /etc/ambari-server/conf/ambari.properties
-RUN echo 'server.jdbc.rca.user.name=ambaridba' >> /etc/ambari-server/conf/ambari.properties
-RUN echo 'server.jdbc.user.name=ambaridba' >> /etc/ambari-server/conf/ambari.properties
+RUN echo 'server.jdbc.rca.user.name=ambari' >> /etc/ambari-server/conf/ambari.properties
+RUN echo 'server.jdbc.user.name=ambari' >> /etc/ambari-server/conf/ambari.properties
 RUN echo 'server.jdbc.connection-pool=internal' >> /etc/ambari-server/conf/ambari.properties
 RUN echo 'server.jdbc.database_name=ambari' >> /etc/ambari-server/conf/ambari.properties
 RUN echo 'server.jdbc.port=5432' >> /etc/ambari-server/conf/ambari.properties

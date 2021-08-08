@@ -2,7 +2,7 @@ FROM centos:7
 MAINTAINER Wilker
 
 RUN yum update -y && yum clean all
-RUN yum install -y systemd-sysv && yum clean all
+RUN yum install -y systemd-sysv telnet net-tools && yum clean all
 
 #Setting up systemd
 ENV container docker
